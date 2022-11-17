@@ -1,7 +1,13 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿
+using Microsoft.Extensions.Configuration;
+using todo_app_.net.Models;
+using todo_app_.net.Services;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.Configure<MongoBDSettings>(builder.Configuration.GetSection("Todo_dotnet"));
+builder.Services.AddSingleton<MongoDBService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
