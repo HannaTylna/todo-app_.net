@@ -3,8 +3,18 @@ using Microsoft.Extensions.Configuration;
 using todo_app_.net.Models;
 using todo_app_.net.Services;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:7007",
+                                              "https://localhost:44463");
+                      });
+});
 // Add services to the container.
 builder.Services.Configure<MongoBDSettings>(builder.Configuration.GetSection("Todo_dotnet"));
 builder.Services.AddSingleton<MongoDBService>();
@@ -23,6 +33,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(MyAllowSpecificOrigins);
+
 
 app.UseAuthorization();
 
